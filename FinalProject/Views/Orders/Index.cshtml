@@ -1,0 +1,47 @@
+﻿@model IEnumerable<FinalProject.Models.Order>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Orders";
+}
+
+<h2>Orders</h2>
+
+<!-- Search Form -->
+<form method="get" action="@Url.Action("Index", "Orders")" class="form-inline mb-3">
+    <div class="form-group">
+        <input type="text" name="customerName" class="form-control" placeholder="Customer Name" value="@ViewBag.CustomerName" />
+    </div>
+    <div class="form-group">
+        <input type="date" name="startDate" class="form-control" value="@ViewBag.StartDate?.ToString(" yyyy-MM-dd")" />
+    </div>
+    <div class="form-group">
+        <input type="date" name="endDate" class="form-control" value="@ViewBag.EndDate?.ToString(" yyyy-MM-dd")" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<p>
+    @Html.ActionLink("Create New Order", "Create", null, new { @class = "btn btn-success" })
+</p>
+
+<script>
+    $(document).ready(function () {
+        $('#orderSearchForm').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '@Url.Action("Index", "Orders")',
+                data: formData,
+                type: 'GET',
+                success: function (result) {
+                    $('#orderTable').html(result);
+                },
+                error: function () {
+                    alert('Error occurred while loading orders.');
+                }
+            });
+        });
+    });
+</script>

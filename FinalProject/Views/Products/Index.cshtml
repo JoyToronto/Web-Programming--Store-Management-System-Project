@@ -1,0 +1,97 @@
+﻿@model IEnumerable<FinalProject.Models.Product>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Products Index";
+}
+
+<h2>Products</h2>
+
+@Html.Partial("_SearchBar")
+
+<!-- Search Form -->
+<form method="get" action="@Url.Action("Index", "Products")" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <input type="number" name="minPrice" class="form-control" placeholder="Min Price" step="0.01" value="@Request.QueryString["minPrice"]" />
+    </div>
+    <div class="form-group mr-2">
+        <input type="number" name="maxPrice" class="form-control" placeholder="Max Price" step="0.01" value="@Request.QueryString["maxPrice"]" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+    <a href="@Url.Action("Index", "Products")" class="btn btn-secondary ml-2">Reset</a>
+</form>
+
+<p>
+    @Html.ActionLink("Create New Product", "Create", null, new { @class = "btn btn-success" })
+</p>
+
+<!-- Product Table -->
+<div id="productTable">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(product.ImagePath))
+                        {
+                            <img src="@Url.Content(product.ImagePath)" alt="Product Image" style="width:100px;" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
+                    <td>@product.Name</td>
+                    <td>@product.Description</td>
+                    <td>@product.Price</td>
+                    <td>@product.Stock</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = product.ProductID }) |
+                        @Html.ActionLink("Details", "Details", new { id = product.ProductID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = product.ProductID })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Include jQuery for AJAX functionality -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // AJAX form submission for search
+        $('#searchForm').submit(function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            var formData = $(this).serialize(); // Get form data
+
+            // Perform AJAX request
+            $.ajax({
+                url: '@Url.Action("Index", "Products")',  // Controller action URL
+                data: formData,  // Send form data
+                success: function (response) {
+                    // Update the product table with the new data
+                    $('#productTable').html($(response).find('#productTable').html());
+                }
+            });
+        });
+
+        // Change event for sorting dropdown
+        $('#sortOrder').change(function () {
+            $('#searchForm').submit(); // Submit form when sort order changes
+        });
+    });
+</script>

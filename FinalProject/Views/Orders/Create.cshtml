@@ -1,0 +1,93 @@
+﻿@model FinalProject.Models.Order
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Order</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomerID, "CustomerID", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CustomerID", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <h4>Products</h4>
+            <table id="productsTable" class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Html.DropDownList("OrderProducts[0].ProductID", (SelectList)ViewBag.Products, "Select Product", new { @class = "form-control" })
+                        </td>
+                        <td>
+                            @Html.TextBox("OrderProducts[0].Quantity", null, new { @class = "form-control" })
+                        </td>
+                    </tr>
+                </tbody>'There is no ViewData item of type 'IEnumerable
+                <SelectListItem>' that has the key 'OrderProducts[0].ProductID'.'
+
+            </table>
+            <button type="button" class="btn btn-secondary" onclick="addProductRow()">Add Another Product</button>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var productIndex = 1; // Start from 1 because we already have one product row
+
+        function addProductRow() {
+            var table = document.getElementById("productsTable").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+
+            // Create Product DropDown
+            var productCell = newRow.insertCell(0);
+            productCell.innerHTML = '<select name="OrderProducts[' + productIndex + '].ProductID" class="form-control">' +
+                '@Html.Raw(((SelectList)ViewBag.Products).Select(x => $"<option value=\"{x.Value}\"{(x.Selected ? " selected" : "")}>{x.Text}</option>").ToString().Replace("\\", ""))' +
+                '</select>';
+
+            // Create Quantity Input
+            var quantityCell = newRow.insertCell(1);
+            quantityCell.innerHTML = '<input type="text" name="OrderProducts[' + productIndex + '].Quantity" class="form-control" />';
+
+            productIndex++; // Increment index for the next product row
+        }
+    </script>
+}

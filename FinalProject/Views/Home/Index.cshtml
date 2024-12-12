@@ -1,0 +1,58 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Home Page";
+
+}
+
+<div class="jumbotron text-center">
+    <h1 class="display-4">Welcome to the Store Management System</h1>
+    <p class="lead">Efficiently manage your store's products, categories, orders, and more with ease.</p>
+    <hr class="my-4">
+    <p>Get started by exploring the features below:</p>
+    <a class="btn btn-primary btn-lg" href="@Url.Action("Index", "Products")" role="button">View Products</a>
+    <a class="btn btn-success btn-lg" href="@Url.Action("Index", "Categories")" role="button">Manage Categories</a>
+</div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 text-center">
+            <i class="fas fa-box fa-3x mb-3"></i>
+            <h3>Products</h3>
+            <p>Manage your inventory by adding, editing, or deleting products. Keep track of stock and prices seamlessly.</p>
+            <a class="btn btn-outline-primary" href="@Url.Action("Index", "Products")">Manage Products</a>
+        </div>
+        <div class="col-md-4 text-center">
+            <i class="fas fa-tags fa-3x mb-3"></i>
+            <h3>Categories</h3>
+            <p>Organize your products into categories for better management and user experience.</p>
+            <a class="btn btn-outline-success" href="@Url.Action("Index", "Categories")">Manage Categories</a>
+        </div>
+        <div class="col-md-4 text-center">
+            <i class="fas fa-shopping-cart fa-3x mb-3"></i>
+            <h3>Orders</h3>
+            <p>View and manage customer orders efficiently, ensuring smooth processing and delivery.</p>
+            <a class="btn btn-outline-warning" href="@Url.Action("Index", "Orders")">View Orders</a>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4 text-center">
+            <i class="fas fa-users fa-3x mb-3"></i>
+            <h3>Customers</h3>
+            <p>Manage customer information and provide personalized services to enhance customer satisfaction.</p>
+            <a class="btn btn-outline-info" href="@Url.Action("Index", "Customer")">Manage Customers</a>
+        </div>
+        <div class="col-md-4 text-center">
+            <i class="fas fa-truck fa-3x mb-3"></i>
+            <h3>Delivery</h3>
+            <p>Track and manage deliveries to ensure products reach customers on time.</p>
+            <a class="btn btn-outline-dark" href="@Url.Action("Index", "Delivery")">Manage Deliveries</a>
+        </div>
+        <div class="col-md-4 text-center">
+            <i class="fas fa-money-check-alt fa-3x mb-3"></i>
+            <h3>Payments</h3>
+            <p>Track payment statuses and manage transactions securely and efficiently.</p>
+            <a class="btn btn-outline-secondary" href="@Url.Action("Index", "Payment")">View Payments</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+﻿@model IEnumerable<FinalProject.Models.Order>
+
+@{
+    ViewBag.Title = "Order History";
+}
+
+<h2>Order History</h2>
+
+@using (Html.BeginForm("History", "Orders", FormMethod.Get))
+{
+    <div class="form-horizontal">
+        <h4>Search Orders</h4>
+        <hr />
+
+        <div class="form-group">
+            @Html.Label("Customer Name", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" name="customerName" value="@ViewBag.CustomerName" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Order Date Range", new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <input type="date" name="startDate" value="@ViewBag.StartDate" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <input type="date" name="endDate" value="@ViewBag.EndDate" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Total Amount Range", new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                <input type="number" name="minAmount" value="@ViewBag.MinAmount" class="form-control" step="0.01" />
+            </div>
+            <div class="col-md-4">
+                <input type="number" name="maxAmount" value="@ViewBag.MaxAmount" class="form-control" step="0.01" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Search" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Order Date</th>
+            <th>Total Amount</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderID</td>
+                <td>@order.Customer?.Name</td>
+                <td>@order.OrderDate.ToShortDateString()</td>
+                <td>@order.TotalAmount.ToString("C")</td>
+                <td>
+                    @Html.ActionLink("View", "Details", new { id = order.OrderID })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    @Html.ActionLink("Back to Orders", "Index")
+</div>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<FinalProject.Models.Customer>
+
+@{
+    ViewBag.Title = "Customer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Customer</h2>
+
+<form method="get" action="@Url.Action("Index", "Customer")">
+    <div class="form-group">
+        <input type="text" name="searchQuery" class="form-control" placeholder="Search by Name or Email" value="@Request.QueryString["searchQuery"]" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div id="customerTable">
+    @Html.Partial("_CustomerTable", Model)
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#customerSearchForm').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '@Url.Action("Index", "Customer")',
+                data: formData,
+                type: 'GET',
+                success: function (result) {
+                    $('#customerTable').html(result);
+                },
+                error: function () {
+                    alert('Error occurred while loading customers.');
+                }
+            });
+        });
+    });
+</script>

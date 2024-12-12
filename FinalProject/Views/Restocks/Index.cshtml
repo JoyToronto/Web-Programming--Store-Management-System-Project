@@ -1,0 +1,36 @@
+﻿@model IEnumerable<FinalProject.Models.Restock>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Restocking Events";
+}
+
+<h2>Restocking Events</h2>
+
+<p>
+    @Html.ActionLink("Create New Restock Event", "Create", "Restocks", null, new { @class = "btn btn-primary" })
+</p>
+<div id="restocksTable">
+    @Html.Partial("_RestocksTable", Model)
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#restockSearchForm').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '@Url.Action("Index", "Restocks")',
+                data: formData,
+                type: 'GET',
+                success: function (result) {
+                    $('#restocksTable').html(result);
+                },
+                error: function () {
+                    alert('Error occurred while loading restocks.');
+                }
+            });
+        });
+    });
+</script>

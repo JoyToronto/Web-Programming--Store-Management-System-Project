@@ -1,0 +1,49 @@
+﻿@model IEnumerable<FinalProject.Models.Category>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Categories";
+}
+
+<h2>Categories</h2>
+
+<p>
+    @Html.ActionLink("Create New Category", "Create", null, new { @class = "btn btn-success" })
+</p>
+
+<!-- Search Form (Optional, for filtering categories based on certain criteria) -->
+<form method="get" action="@Url.Action("Index", "Categories")" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Search Categories" value="@Request.QueryString["searchTerm"]" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+    <a href="@Url.Action("Index", "Categories")" class="btn btn-secondary ml-2">Reset</a>
+</form>
+
+<div id="categoryTable">
+    @Html.Partial("_CategoryTable", Model)  <!-- Partial view to render the categories table -->
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Trigger AJAX request when the form is submitted
+            $('form').on('submit', function (e) {
+                e.preventDefault();
+                var searchTerm = $('input[name="searchTerm"]').val();
+                $.ajax({
+                    url: '@Url.Action("Index", "Categories")',
+                    data: { searchTerm: searchTerm },  // Send search term if provided
+                    type: 'GET',
+                    success: function (data) {
+                        // Update the category table with the new data
+                        $('#categoryTable').html(data);
+                    },
+                    error: function () {
+                        alert('Error loading categories.');
+                    }
+                });
+            });
+        });
+    </script>
+}
